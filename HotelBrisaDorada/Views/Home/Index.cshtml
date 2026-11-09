@@ -1,0 +1,108 @@
+@model HomeViewModel
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<section class="hero">
+    <div class="container hero-contenido">
+        <h1>Tu próxima historia comienza en Guatapé</h1>
+        <p class="hero-texto">Despierta entre montañas verdes y las aguas del embalse. Un hotel pensado para descansar, compartir y volver.</p>
+        <a asp-controller="Habitaciones" asp-action="Index" class="btn btn-dorado btn-lg">Ver habitaciones</a>
+    </div>
+</section>
+
+<div class="container buscador-wrap">
+    <form class="buscador" asp-controller="Reservas" asp-action="Disponibilidad" method="get">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label for="b-entrada" class="form-label">Llegada</label>
+                <input id="b-entrada" type="date" name="fechaEntrada" class="form-control" data-fecha-entrada
+                       min="@DateTime.Today.ToString("yyyy-MM-dd")"
+                       value="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")" required />
+            </div>
+            <div class="col-md-3">
+                <label for="b-salida" class="form-label">Salida</label>
+                <input id="b-salida" type="date" name="fechaSalida" class="form-control" data-fecha-salida
+                       min="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")"
+                       value="@DateTime.Today.AddDays(3).ToString("yyyy-MM-dd")" required />
+            </div>
+            <div class="col-md-2">
+                <label for="b-personas" class="form-label">Personas</label>
+                <input id="b-personas" type="number" name="personas" class="form-control" min="1" max="5" value="2" required />
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-selva w-100">Buscar disponibilidad</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<section class="seccion">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <h2>Descanso con aire de embalse</h2>
+                <p>Hotel Brisa Dorada es una propuesta de alojamiento ubicada en Guatapé, Antioquia. Su concepto combina comodidad, naturaleza y una experiencia de descanso inspirada en los paisajes del embalse.</p>
+                <p>Queremos que cada visitante disfrute de un ambiente tranquilo, rodeado de vegetación y cerca de los atractivos turísticos de la región.</p>
+                <ul class="lista-puntos">
+                    <li><i class="bi bi-check2-circle"></i>Habitaciones cómodas y limpias</li>
+                    <li><i class="bi bi-check2-circle"></i>Atención personalizada</li>
+                    <li><i class="bi bi-check2-circle"></i>Espacios para descansar y compartir</li>
+                </ul>
+            </div>
+            <div class="col-lg-6">
+                <img class="imagen-seccion" src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1100&q=80"
+                     alt="Piscina y edificio del hotel rodeado de vegetación" loading="lazy" />
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="seccion seccion-clara">
+    <div class="container">
+        <div class="titulo-seccion">
+            <h2>Elige tu habitación</h2>
+            <p>Tres tipos de alojamiento para distintos planes de viaje.</p>
+        </div>
+        <div class="row g-4">
+            @foreach (var habitacion in Model.Habitaciones)
+            {
+                <partial name="_HabitacionCard" model="habitacion" />
+            }
+        </div>
+        <div class="text-center mt-5">
+            <a asp-controller="Habitaciones" asp-action="Tarifas" class="btn btn-outline-selva">Consultar tarifas</a>
+        </div>
+    </div>
+</section>
+
+<section class="seccion seccion-oscura">
+    <div class="container">
+        <div class="titulo-seccion">
+            <h2>Un lugar para desconectarte</h2>
+            <p>Lo necesario para que tu estadía sea cómoda de principio a fin.</p>
+        </div>
+        <div class="row g-4">
+            @foreach (var servicio in Model.Servicios)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="servicio">
+                        <span class="servicio-icono"><i class="bi @servicio.Icono"></i></span>
+                        <div>
+                            <h3 class="h5">@servicio.Nombre</h3>
+                            <p class="mb-0">@servicio.Descripcion</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="llamado">
+    <div class="container text-center">
+        <h2>Reserva tu escapada a Guatapé</h2>
+        <p>Cuéntanos tus fechas y registramos tu solicitud al instante.</p>
+        <a asp-controller="Reservas" asp-action="Create" class="btn btn-dorado btn-lg">Reservar ahora</a>
+    </div>
+</section>

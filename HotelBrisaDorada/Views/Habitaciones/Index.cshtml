@@ -1,0 +1,50 @@
+@model IReadOnlyList<Habitacion>
+@{
+    ViewData["Title"] = "Habitaciones";
+}
+
+<section class="encabezado-pagina">
+    <div class="container">
+        <h1>Nuestras habitaciones</h1>
+        <p>Encuentra el espacio que mejor se adapta a tu viaje.</p>
+    </div>
+</section>
+
+<section class="seccion">
+    <div class="container">
+        @foreach (var h in Model)
+        {
+            <article class="habitacion-fila">
+                <div class="row g-0">
+                    <div class="col-lg-5">
+                        <img class="habitacion-fila-img" src="@h.ImagenUrl" alt="@h.Nombre" loading="lazy" />
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="habitacion-fila-cuerpo">
+                            <h2 class="h3">@h.Nombre</h2>
+                            <p>@h.Descripcion</p>
+                            <ul class="datos mb-3">
+                                <li><i class="bi bi-people"></i>Hasta @h.CapacidadMaxima personas</li>
+                                <li><i class="bi bi-aspect-ratio"></i>@h.Metros m²</li>
+                                <li><i class="bi bi-moon-stars"></i>@h.Camas</li>
+                            </ul>
+                            <ul class="chips">
+                                @foreach (var comodidad in h.Comodidades)
+                                {
+                                    <li>@comodidad</li>
+                                }
+                            </ul>
+                            <div class="habitacion-pie mt-auto">
+                                <p class="precio mb-0"><span>Desde</span> @h.PrecioTemporadaBaja.Cop() <small>/ noche</small></p>
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <a asp-controller="Habitaciones" asp-action="Detalles" asp-route-id="@h.Id" class="btn btn-outline-selva">Ver detalles</a>
+                                    <a asp-controller="Reservas" asp-action="Create" asp-route-habitacionId="@h.Id" class="btn btn-selva">Reservar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        }
+    </div>
+</section>

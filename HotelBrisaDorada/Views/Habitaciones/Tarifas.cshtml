@@ -1,0 +1,58 @@
+@model IReadOnlyList<Habitacion>
+@{
+    ViewData["Title"] = "Tarifas";
+}
+
+<section class="encabezado-pagina">
+    <div class="container">
+        <h1>Tarifas y alojamiento</h1>
+        <p>Valores por habitación y por noche, en pesos colombianos.</p>
+    </div>
+</section>
+
+<section class="seccion">
+    <div class="container">
+        <div class="table-responsive">
+            <table class="table tabla-tarifas align-middle">
+                <caption>Tabla 1. Tarifas de referencia de Hotel Brisa Dorada (valores ilustrativos de un proyecto académico)</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Tipo de habitación</th>
+                        <th scope="col">Capacidad base</th>
+                        <th scope="col">Temporada baja</th>
+                        <th scope="col">Temporada alta</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var h in Model)
+                    {
+                        <tr>
+                            <th scope="row">@h.Nombre</th>
+                            <td>@h.CapacidadBase personas</td>
+                            <td>@h.PrecioTemporadaBaja.Cop()</td>
+                            <td>@h.PrecioTemporadaAlta.Cop()</td>
+                        </tr>
+                    }
+                    <tr>
+                        <th scope="row" rowspan="2">Servicios adicionales</th>
+                        <td>Desayuno</td>
+                        <td colspan="2">@HotelService.TarifaDesayuno.Cop() por persona y por noche</td>
+                    </tr>
+                    <tr>
+                        <td>Persona adicional</td>
+                        <td colspan="2">@HotelService.TarifaPersonaAdicional.Cop() por noche</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="nota-caja mt-4">
+            <h2 class="h5">Temporadas</h2>
+            <p class="mb-0">La temporada alta va del 15 de junio al 15 de julio y del 15 de diciembre al 15 de enero. El resto del año aplica temporada baja. Los precios están sujetos a disponibilidad y cambios.</p>
+        </div>
+
+        <div class="text-center mt-5">
+            <a asp-controller="Reservas" asp-action="Disponibilidad" class="btn btn-selva btn-lg">Consultar disponibilidad</a>
+        </div>
+    </div>
+</section>

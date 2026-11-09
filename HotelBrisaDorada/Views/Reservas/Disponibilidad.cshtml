@@ -1,0 +1,107 @@
+@model DisponibilidadViewModel
+@{
+    ViewData["Title"] = "Disponibilidad";
+    var entrada = Model.FechaEntrada.GetValueOrDefault();
+    var salida = Model.FechaSalida.GetValueOrDefault();
+}
+
+<section class="encabezado-pagina">
+    <div class="container">
+        <h1>Consultar disponibilidad</h1>
+        <p>Elige tus fechas y mira qué habitaciones tenemos para ti.</p>
+    </div>
+</section>
+
+<section class="seccion">
+    <div class="container">
+
+        @if (Model.Error != null)
+        {
+            <div class="alert alert-danger" role="alert">@Model.Error</div>
+        }
+
+        <form class="buscador buscador-plano" asp-controller="Reservas" asp-action="Disponibilidad" method="get">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label for="FechaEntrada" class="form-label">Llegada</label>
+                    <input asp-for="FechaEntrada" class="form-control" data-fecha-entrada
+                           min="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                </div>
+                <div class="col-md-3">
+                    <label for="FechaSalida" class="form-label">Salida</label>
+                    <input asp-for="FechaSalida" class="form-control" data-fecha-salida
+                           min="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")" />
+                </div>
+                <div class="col-md-2">
+                    <label for="Personas" class="form-label">Personas</label>
+                    <input asp-for="Personas" type="number" class="form-control" min="1" max="5" />
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-selva w-100">Buscar disponibilidad</button>
+                </div>
+            </div>
+        </form>
+
+        @if (Model.Consultado)
+        {
+            <div class="mt-5">
+                <h2 class="h3 mb-1">Habitaciones para tu estadía</h2>
+                <p class="text-secondary">
+                    Del @entrada.Fecha() al @salida.Fecha(),
+                    @Formato.Plural((salida - entrada).Days, "noche", "noches"),
+                    @Formato.Plural(Model.Personas, "persona", "personas").
+                </p>
+
+                @foreach (var r in Model.Resultados)
+                {
+                    var h = r.Habitacion;
+                    <article class="resultado">
+                        <div class="row g-0">
+                            <div class="col-md-3">
+                                <img class="resultado-img" src="@h.ImagenUrl" alt="@h.Nombre" loading="lazy" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="resultado-cuerpo">
+                                    <div>
+                                        <h3 class="h4 mb-1">@h.Nombre</h3>
+                                        <p class="text-secondary mb-2">@h.Camas, @h.Metros m²</p>
+                                        @if (!r.CabePersonas)
+                                        {
+                                            <span class="etiqueta etiqueta-aviso">Admite máximo @h.CapacidadMaxima personas</span>
+                                        }
+                                        else if (r.Disponibles == 0)
+                                        {
+                                            <span class="etiqueta etiqueta-agotada">No disponible en estas fechas</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="etiqueta etiqueta-ok">@Formato.Plural(r.Disponibles, "habitación disponible", "habitaciones disponibles")</span>
+                                        }
+                                    </div>
+                                    <div class="resultado-accion">
+                                        @if (r.Cotizacion != null)
+                                        {
+                                            <p class="precio-total mb-0">@r.Cotizacion.Total.Cop()</p>
+                                            <p class="small text-secondary">Alojamiento por @Formato.Plural(r.Cotizacion.Noches, "noche", "noches")</p>
+                                        }
+                                        @if (r.CabePersonas && r.Disponibles > 0)
+                                        {
+                                            <a asp-controller="Reservas" asp-action="Create"
+                                               asp-route-habitacionId="@h.Id"
+                                               asp-route-fechaEntrada="@entrada.ToString("yyyy-MM-dd")"
+                                               asp-route-fechaSalida="@salida.ToString("yyyy-MM-dd")"
+                                               asp-route-personas="@Model.Personas"
+                                               class="btn btn-dorado">Reservar</a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                }
+
+                <p class="small text-secondary mt-3">La disponibilidad se calcula con las reservas registradas en el sistema. El total no incluye desayuno ni personas adicionales; se detallan al reservar.</p>
+            </div>
+        }
+    </div>
+</section>

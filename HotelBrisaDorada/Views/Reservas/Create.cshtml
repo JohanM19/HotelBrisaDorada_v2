@@ -1,0 +1,120 @@
+@model Reserva
+@{
+    ViewData["Title"] = "Reservar";
+    var habitaciones = (IEnumerable<Habitacion>)ViewBag.Habitaciones;
+}
+
+<section class="encabezado-pagina">
+    <div class="container">
+        <h1>Reserva tu estadía</h1>
+        <p>Completa tus datos y registra tu solicitud de reserva.</p>
+    </div>
+</section>
+
+<section class="seccion">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-8">
+                <div class="formulario">
+                    <form asp-controller="Reservas" asp-action="Create" method="post" novalidate>
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <h2 class="h4 mb-3">Datos del huésped</h2>
+                        <div class="row g-3 mb-4">
+                            <div class="col-12">
+                                <label asp-for="Nombre" class="form-label"></label>
+                                <input asp-for="Nombre" class="form-control" autocomplete="name" />
+                                <span asp-validation-for="Nombre" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Documento" class="form-label"></label>
+                                <input asp-for="Documento" class="form-control" />
+                                <span asp-validation-for="Documento" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Telefono" class="form-label"></label>
+                                <input asp-for="Telefono" type="tel" class="form-control" autocomplete="tel" />
+                                <span asp-validation-for="Telefono" class="text-danger"></span>
+                            </div>
+                            <div class="col-12">
+                                <label asp-for="Correo" class="form-label"></label>
+                                <input asp-for="Correo" type="email" class="form-control" autocomplete="email" />
+                                <span asp-validation-for="Correo" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <h2 class="h4 mb-3">Detalles de la estadía</h2>
+                        <div class="row g-3 mb-4">
+                            <div class="col-12">
+                                <label asp-for="HabitacionId" class="form-label"></label>
+                                <select asp-for="HabitacionId" class="form-select">
+                                    <option value="0">Selecciona una opción</option>
+                                    @foreach (var h in habitaciones)
+                                    {
+                                        <option value="@h.Id" selected="@(h.Id == Model.HabitacionId)">@h.Nombre, desde @h.PrecioTemporadaBaja.Cop() por noche</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="HabitacionId" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="FechaEntrada" class="form-label"></label>
+                                <input asp-for="FechaEntrada" class="form-control" data-fecha-entrada
+                                       min="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                                <span asp-validation-for="FechaEntrada" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="FechaSalida" class="form-label"></label>
+                                <input asp-for="FechaSalida" class="form-control" data-fecha-salida
+                                       min="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")" />
+                                <span asp-validation-for="FechaSalida" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="Personas" class="form-label"></label>
+                                <input asp-for="Personas" type="number" class="form-control" min="1" max="5" />
+                                <span asp-validation-for="Personas" class="text-danger"></span>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input asp-for="IncluyeDesayuno" class="form-check-input" />
+                                    <label asp-for="IncluyeDesayuno" class="form-check-label"></label>
+                                    <div class="form-text">@HotelService.TarifaDesayuno.Cop() por persona y por noche.</div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label asp-for="Comentarios" class="form-label"></label>
+                                <textarea asp-for="Comentarios" class="form-control" rows="3" placeholder="Cuéntanos si tienes alguna solicitud especial"></textarea>
+                                <span asp-validation-for="Comentarios" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-check mb-4">
+                            <input asp-for="AceptaTerminos" class="form-check-input" />
+                            <label asp-for="AceptaTerminos" class="form-check-label"></label>
+                            <div><span asp-validation-for="AceptaTerminos" class="text-danger"></span></div>
+                        </div>
+
+                        <button type="submit" class="btn btn-selva btn-lg w-100">Enviar solicitud de reserva</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <aside class="panel-precio">
+                    <h2 class="h5">Antes de enviar</h2>
+                    <ul class="lista-simple">
+                        <li>Llegada desde las 3:00 p. m. y salida hasta las 12:00 m.</li>
+                        <li>Persona adicional sobre la capacidad base: @HotelService.TarifaPersonaAdicional.Cop() por noche.</li>
+                        <li>Recibirás un código de reserva al terminar.</li>
+                    </ul>
+                    <a asp-controller="Reservas" asp-action="Disponibilidad" class="btn btn-outline-selva w-100 mb-2">Consultar disponibilidad</a>
+                    <a asp-controller="Habitaciones" asp-action="Tarifas" class="btn btn-link w-100">Ver tarifas</a>
+                </aside>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,63 @@
+@model Habitacion
+@{
+    ViewData["Title"] = Model.Nombre;
+}
+
+<section class="encabezado-pagina">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2">
+                <li class="breadcrumb-item"><a asp-controller="Habitaciones" asp-action="Index">Habitaciones</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@Model.Nombre</li>
+            </ol>
+        </nav>
+        <h1>@Model.Nombre</h1>
+        <p>@Model.Resumen</p>
+    </div>
+</section>
+
+<section class="seccion">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-8">
+                <img class="imagen-seccion imagen-detalle" src="@Model.ImagenUrl" alt="@Model.Nombre" />
+
+                <h2 class="h3 mt-5">Sobre esta habitación</h2>
+                <p>@Model.Descripcion</p>
+
+                <div class="row g-3 my-4">
+                    <div class="col-sm-4">
+                        <div class="dato-caja"><i class="bi bi-people"></i><strong>@Model.CapacidadBase a @Model.CapacidadMaxima</strong><span>personas</span></div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="dato-caja"><i class="bi bi-aspect-ratio"></i><strong>@Model.Metros m²</strong><span>de espacio</span></div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="dato-caja"><i class="bi bi-moon-stars"></i><strong>@Model.Camas</strong><span>camas</span></div>
+                    </div>
+                </div>
+
+                <h2 class="h4">Comodidades</h2>
+                <ul class="lista-puntos">
+                    @foreach (var comodidad in Model.Comodidades)
+                    {
+                        <li><i class="bi bi-check2-circle"></i>@comodidad</li>
+                    }
+                </ul>
+            </div>
+
+            <div class="col-lg-4">
+                <aside class="panel-precio">
+                    <h2 class="h5">Tarifa por noche</h2>
+                    <dl class="mb-3">
+                        <div class="fila-precio"><dt>Temporada baja</dt><dd>@Model.PrecioTemporadaBaja.Cop()</dd></div>
+                        <div class="fila-precio"><dt>Temporada alta</dt><dd>@Model.PrecioTemporadaAlta.Cop()</dd></div>
+                    </dl>
+                    <p class="small text-secondary">Incluye @Model.CapacidadBase personas. Persona adicional: @HotelService.TarifaPersonaAdicional.Cop() por noche.</p>
+                    <a asp-controller="Reservas" asp-action="Create" asp-route-habitacionId="@Model.Id" class="btn btn-selva w-100 mb-2">Reservar esta habitación</a>
+                    <a asp-controller="Reservas" asp-action="Disponibilidad" class="btn btn-outline-selva w-100">Consultar disponibilidad</a>
+                </aside>
+            </div>
+        </div>
+    </div>
+</section>

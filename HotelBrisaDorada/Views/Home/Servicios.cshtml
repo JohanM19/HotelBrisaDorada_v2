@@ -1,0 +1,38 @@
+@model IReadOnlyList<Servicio>
+@{
+    ViewData["Title"] = "Servicios";
+}
+
+<section class="encabezado-pagina">
+    <div class="container">
+        <h1>Servicios del hotel</h1>
+        <p>Todo lo que encuentras durante tu estadía en Brisa Dorada.</p>
+    </div>
+</section>
+
+<section class="seccion">
+    <div class="container">
+        <div class="row g-4">
+            @foreach (var servicio in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="servicio servicio-claro">
+                        <span class="servicio-icono"><i class="bi @servicio.Icono"></i></span>
+                        <div>
+                            <h2 class="h5">@servicio.Nombre</h2>
+                            <p class="mb-0 text-secondary">@servicio.Descripcion</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="nota-caja mt-5">
+            <h2 class="h5">Valores adicionales</h2>
+            <p class="mb-0">
+                El desayuno cuesta @HotelService.TarifaDesayuno.Cop() por persona y por noche. Cada persona adicional
+                sobre la capacidad base de la habitación cuesta @HotelService.TarifaPersonaAdicional.Cop() por noche.
+            </p>
+        </div>
+    </div>
+</section>

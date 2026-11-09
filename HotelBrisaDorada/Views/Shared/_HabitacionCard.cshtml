@@ -1,0 +1,21 @@
+@model Habitacion
+
+<div class="col-md-6 col-lg-4">
+    <article class="habitacion h-100">
+        <a asp-controller="Habitaciones" asp-action="Detalles" asp-route-id="@Model.Id" class="habitacion-img">
+            <img src="@Model.ImagenUrl" alt="@Model.Nombre" loading="lazy" />
+        </a>
+        <div class="habitacion-cuerpo">
+            <h3 class="h4">@Model.Nombre</h3>
+            <p class="text-secondary">@Model.Resumen</p>
+            <ul class="datos">
+                <li><i class="bi bi-people"></i>Hasta @Model.CapacidadMaxima personas</li>
+                <li><i class="bi bi-aspect-ratio"></i>@Model.Metros m²</li>
+            </ul>
+            <div class="habitacion-pie">
+                <p class="precio mb-0"><span>Desde</span> @Model.PrecioTemporadaBaja.Cop() <small>/ noche</small></p>
+                <a asp-controller="Habitaciones" asp-action="Detalles" asp-route-id="@Model.Id" class="btn btn-outline-selva btn-sm">Ver detalles</a>
+            </div>
+        </div>
+    </article>
+</div>

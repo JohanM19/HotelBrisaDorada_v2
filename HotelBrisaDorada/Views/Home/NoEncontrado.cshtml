@@ -1,0 +1,14 @@
+@{
+    ViewData["Title"] = "Página no encontrada";
+}
+
+<section class="seccion">
+    <div class="container text-center estado-pagina">
+        <h1>No encontramos lo que buscas</h1>
+        <p class="lead text-secondary">La página no existe o cambió de lugar. Puedes volver al inicio o revisar nuestras habitaciones.</p>
+        <div class="d-flex justify-content-center gap-2 flex-wrap">
+            <a asp-controller="Home" asp-action="Index" class="btn btn-selva">Volver al inicio</a>
+            <a asp-controller="Habitaciones" asp-action="Index" class="btn btn-outline-selva">Ver habitaciones</a>
+        </div>
+    </div>
+</section>

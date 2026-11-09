@@ -1,0 +1,16 @@
+@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<section class="seccion">
+    <div class="container text-center estado-pagina">
+        <h1>Algo salió mal</h1>
+        <p class="lead text-secondary">No pudimos procesar tu solicitud. Intenta de nuevo o vuelve al inicio.</p>
+        @if (Model.ShowRequestId)
+        {
+            <p class="small text-secondary">Código de la solicitud: <code>@Model.RequestId</code></p>
+        }
+        <a asp-controller="Home" asp-action="Index" class="btn btn-selva">Volver al inicio</a>
+    </div>
+</section>

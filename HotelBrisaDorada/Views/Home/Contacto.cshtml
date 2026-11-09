@@ -1,0 +1,105 @@
+@model ContactoViewModel
+@{
+    ViewData["Title"] = "Contacto";
+}
+
+<section class="encabezado-pagina">
+    <div class="container">
+        <h1>Contacto</h1>
+        <p>Escríbenos y resolvemos tus dudas sobre tu estadía.</p>
+    </div>
+</section>
+
+<section class="seccion">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-5">
+                <h2 class="h3">Hablemos</h2>
+                <ul class="lista-contacto">
+                    <li><i class="bi bi-geo-alt"></i><span>Guatapé, Antioquia, Colombia</span></li>
+                    <li><i class="bi bi-envelope"></i><span>reservas&#64;brisadorada.com</span></li>
+                    <li><i class="bi bi-telephone"></i><span>+57 300 000 0000</span></li>
+                    <li><i class="bi bi-clock"></i><span>Llegada desde las 3:00 p. m. y salida hasta las 12:00 m.</span></li>
+                </ul>
+                <p class="small text-secondary">Los datos de contacto son ficticios y hacen parte de un proyecto académico.</p>
+
+                <h2 class="h4 mt-5 mb-3">Preguntas frecuentes</h2>
+                <div class="accordion" id="preguntas">
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#p1" aria-expanded="true" aria-controls="p1">
+                                ¿Cómo reservo?
+                            </button>
+                        </h3>
+                        <div id="p1" class="accordion-collapse collapse show" data-bs-parent="#preguntas">
+                            <div class="accordion-body">Consulta la disponibilidad, elige tu habitación y completa el formulario de reserva. Al final recibirás un código de reserva.</div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#p2" aria-expanded="false" aria-controls="p2">
+                                ¿Qué incluye la tarifa?
+                            </button>
+                        </h3>
+                        <div id="p2" class="accordion-collapse collapse" data-bs-parent="#preguntas">
+                            <div class="accordion-body">El alojamiento por noche según la temporada. El desayuno y las personas adicionales se cobran aparte.</div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#p3" aria-expanded="false" aria-controls="p3">
+                                ¿Cuándo es temporada alta?
+                            </button>
+                        </h3>
+                        <div id="p3" class="accordion-collapse collapse" data-bs-parent="#preguntas">
+                            <div class="accordion-body">Del 15 de junio al 15 de julio y del 15 de diciembre al 15 de enero.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="formulario">
+                    <h2 class="h3 mb-4">Envíanos un mensaje</h2>
+
+                    @if (TempData["Mensaje"] != null)
+                    {
+                        <div class="alert alert-success" role="status">@TempData["Mensaje"]</div>
+                    }
+
+                    <form asp-controller="Home" asp-action="Contacto" method="post" novalidate>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Nombre" class="form-label"></label>
+                                <input asp-for="Nombre" class="form-control" autocomplete="name" />
+                                <span asp-validation-for="Nombre" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Correo" class="form-label"></label>
+                                <input asp-for="Correo" type="email" class="form-control" autocomplete="email" />
+                                <span asp-validation-for="Correo" class="text-danger"></span>
+                            </div>
+                            <div class="col-12">
+                                <label asp-for="Asunto" class="form-label"></label>
+                                <input asp-for="Asunto" class="form-control" />
+                                <span asp-validation-for="Asunto" class="text-danger"></span>
+                            </div>
+                            <div class="col-12">
+                                <label asp-for="Mensaje" class="form-label"></label>
+                                <textarea asp-for="Mensaje" class="form-control" rows="5"></textarea>
+                                <span asp-validation-for="Mensaje" class="text-danger"></span>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-selva btn-lg w-100">Enviar mensaje</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
