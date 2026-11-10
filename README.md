@@ -3,7 +3,7 @@
 Aplicación web desarrollada con **ASP.NET Core MVC** y **C#** para el Seguimiento 3 de Programación Web.
 Es un hotel ficticio ubicado en Guatapé, Antioquia, donde se pueden consultar habitaciones, tarifas y disponibilidad, y registrar reservas.
 
-   **Aplicación publicada:** https://hotel-brisa-dorada.onrender.com/
+**Aplicación publicada:** https://hotel-brisa-dorada.onrender.com/
 
 ## Funcionalidades
 
